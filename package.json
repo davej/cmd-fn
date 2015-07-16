@@ -1,0 +1,14 @@
+{
+  "name": "cmd-fn",
+  "version": "1.0.0",
+  "description": "Execute any node module function from the command line.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dave Jeffery",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.8.1",
+  }
+}
