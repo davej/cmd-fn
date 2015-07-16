@@ -82,7 +82,6 @@ if (!program.function) {
       }
     });
   }
-  console.log(program.params[1].toString());
   returnVal = func$.apply(func$, program.params);
 }
 
