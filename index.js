@@ -28,7 +28,7 @@ program
   .usage('[options]')
   .option('-m, --module [name]', 'module name e.g.: `fs`')
   .option('-f, --function [name]', 'function name')
-  .option('-c, --cwd [path]', 'working directory context to run function from')
+  .option('-c, --cwd [path]', 'change working directory context')
   .option('-p, --params [arguments]', 'function arguments specified as an array e.g.: `\'["foo", "bar"]\'`', jsonArgs)
   .option('--promise', 'function is async and uses promises')
   .option('--node-callback', 'function is async with a node-style callback')
