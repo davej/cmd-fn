@@ -6,17 +6,40 @@ function jsonArgs(val) {
   return JSON.parse(val);
 }
 
+function resolve(val) {
+  try {
+    console.log(JSON.stringify(val));
+  } catch (e) {
+    console.log(val);
+  }
+  process.exit(0);
+}
+
+function reject(val) {
+  try {
+    console.error(JSON.stringify(val));
+  } catch (e) {
+    console.error(val);
+  }
+  process.exit(0);
+}
+
 program
   .usage('[options]')
   .option('-m, --module [name]', 'module name e.g.: `fs`')
   .option('-f, --function [name]', 'function name')
   .option('-c, --cwd [path]', 'working directory context to run function from')
   .option('-p, --params [arguments]', 'function arguments specified as an array e.g.: `\'["foo", "bar"]\'`', jsonArgs)
+  .option('--promise', 'function is async and uses promises')
+  .option('--node-callback', 'function is async with a node-style callback')
   .on('--help', function(){
     console.log('  Example:');
     console.log('');
     console.log('    To execute the following node function `fs.readdirSync("/var/tmp")`, you would do:');
     console.log('    $ cmd-fn --module fs --function readdirSync --params \'["/var/tmp"]\'');
+    console.log('');
+    console.log('    To do an async call like `http.get({"hostname":"www.google.com"}, cb)`:');
+    console.log('    $ cmd-fn --module http --function get --params \'[{"hostname":"www.google.com"}]\' --node-callback');
     console.log('');
   })
   .parse(process.argv);
@@ -28,7 +51,7 @@ if (program.cwd) {
 }
 
 if (!program.module) {
-  console.error("Module option (`--module`) is required");
+  console.error('Module option (`--module`) is required');
   process.exit(0);
 }
 
@@ -46,7 +69,31 @@ if (!program.function) {
     console.error('`require(' + program.module + ').' + program.function + '` is not a function');
     process.exit(0);
   }
+  if (program.nodeCallback) {
+    if (!program.params) {
+      program.params = [];
+    }
+    program.params.push(function(err, val) {
+      console.log(err, val);
+      if (err) {
+        reject(err);
+      } else {
+        resolve(val);
+      }
+    });
+  }
+  console.log(program.params[1].toString());
   returnVal = func$.apply(func$, program.params);
 }
 
-console.log(JSON.stringify(returnVal));
+if (program.promise) {
+  returnVal.then(function(val) {
+    resolve(val);
+  }, function(err) {
+    reject(err);
+  });
+} else if(program.nodeCallback) {
+  // Wait for callback
+} else {
+  resolve(returnVal);
+}
