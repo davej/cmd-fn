@@ -1,6 +1,7 @@
 {
   "name": "cmd-fn",
   "version": "1.0.0",
+  "repository": "git://github.com/davej/cmd-fn",
   "description": "Execute any node module function from the command line.",
   "main": "index.js",
   "scripts": {
@@ -9,6 +10,6 @@
   "author": "Dave Jeffery",
   "license": "MIT",
   "dependencies": {
-    "commander": "^2.8.1",
+    "commander": "^2.8.1"
   }
 }
