@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 var program = require('commander');
+var modulePath = require('app-module-path')
 
 function jsonArgs(val) {
   return JSON.parse(val);
@@ -47,7 +48,10 @@ program
 var returnVal = null;
 
 if (program.cwd) {
+  console.log(program.cwd);
   process.chdir(program.cwd);
+  modulePath.addPath(program.cwd);
+  modulePath.addPath(program.cwd + '/node_modules/');
 }
 
 if (!program.module) {
@@ -56,6 +60,19 @@ if (!program.module) {
 }
 
 var module$ = require(program.module);
+
+if (program.nodeCallback) {
+  if (!program.params) {
+    program.params = [];
+  }
+  program.params.push(function(err, val) {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(val);
+    }
+  });
+}
 
 if (!program.function) {
   if (typeof(module$) !== 'function') {
@@ -68,18 +85,6 @@ if (!program.function) {
   if (typeof(func$) !== 'function') {
     console.error('`require(' + program.module + ').' + program.function + '` is not a function');
     process.exit(0);
-  }
-  if (program.nodeCallback) {
-    if (!program.params) {
-      program.params = [];
-    }
-    program.params.push(function(err, val) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(val);
-      }
-    });
   }
   returnVal = func$.apply(func$, program.params);
 }
