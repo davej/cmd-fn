@@ -74,7 +74,6 @@ if (!program.function) {
       program.params = [];
     }
     program.params.push(function(err, val) {
-      console.log(err, val);
       if (err) {
         reject(err);
       } else {
