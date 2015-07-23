@@ -48,7 +48,6 @@ program
 var returnVal = null;
 
 if (program.cwd) {
-  console.log(program.cwd);
   process.chdir(program.cwd);
   modulePath.addPath(program.cwd);
   modulePath.addPath(program.cwd + '/node_modules/');
