@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 var program = require('commander');
-var modulePath = require('app-module-path')
+var modulePath = require('app-module-path');
 
 function jsonArgs(val) {
   return JSON.parse(val);
